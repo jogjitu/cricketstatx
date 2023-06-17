@@ -75,6 +75,7 @@
             <li class="nav-item"><a class="nav-link active" id="stats-tab" data-bs-toggle="tab" href="#tab-stats" role="tab" aria-controls="tab-stats" aria-selected="true">Stats</a></li>
             <li class="nav-item"><a class="nav-link" id="batting-tab" data-bs-toggle="tab" href="#tab-batting" role="tab" aria-controls="tab-batting" aria-selected="false">Batting</a></li>
             <li class="nav-item"><a class="nav-link" id="bowling-tab" data-bs-toggle="tab" href="#tab-bowling" role="tab" aria-controls="tab-bowling" aria-selected="false">Bowling</a></li>
+            <li class="nav-item"><a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab-profile" role="tab" aria-controls="tab-profile" aria-selected="false">Profile</a></li>
           </ul>
         </div>
       </nav>
@@ -111,11 +112,12 @@
               <div id="battingTable" class="card-body">
                 <div class="row justify-content-end g-0">
                   <div class="col-auto col-sm-5 mb-3">
-                    <form>
-                      <div class="input-group"><input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search..." aria-label="search" />
-                        <div class="input-group-text bg-transparent"><span class="fa fa-search fs--1 text-600"></span></div>
+                    <form onsubmit="return false">
+                      <div class="input-group">
+                        <input class="form-control shadow-none search" type="search" placeholder="Search..." aria-label="search" />
+                        <div class="input-group-text bg-primary text-white"><span class="fa fa-search fs--1 text-600"></span></div>
                       </div>
-                    </form>
+                    </form>                  
                   </div>
                 </div>
                 <div class="table-responsive border scrollbar">
@@ -131,10 +133,7 @@
                         <th class="sort" data-sort="Runs">Runs</th>
                         <th class="sort" data-sort="Balls">Balls</th>
                         <th class="sort" data-sort="OutAs">Out As</th>
-                        <th class="sort" data-sort="Good">Good</th>
-                        <th class="sort" data-sort="Improve">Improve</th>
-                        <th class="sort" data-sort="Comment">Comment</th>
-                        <th class="sort" data-sort="ScoreLink">Score Link</th>
+                        <th class="text-nowrap">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="battingTableBody" class="list">
@@ -182,10 +181,7 @@
                         <th class="sort" data-sort="Wickets">Wickets</th>
                         <th class="sort" data-sort="Wides">Wides</th>
                         <th class="sort" data-sort="NoBalls">NoBalls</th>
-                        <th class="sort" data-sort="Good">Good</th>
-                        <th class="sort" data-sort="Improve">Improve</th>
-                        <th class="sort" data-sort="Comment">Comment</th>
-                        <th class="sort" data-sort="ScoreLink">Score Link</th>
+                        <th class="text-nowrap">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="bowlingTableBody" class="list">
@@ -199,12 +195,282 @@
               </div>
             </div>
           </div>
+
+          <!-- Profile Tab -->
+          <div class="tab-pane fade" id="tab-profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="card">
+              <div class="card-header">
+                <h4>Profile</h4>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-4 text-center">
+                    <img src="./assets/img/profile.jpeg" id='image-preview' style="max-width: 200px;">
+                    <br>
+                    <input class="form-control" type="file" id="image-upload" style="display: none;">
+                  </div>
+                  <div class="col-lg-8">
+                    <form class="my-3">
+                      <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name">
+                      </div>
+                      <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username">
+                      </div>
+                      <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="number" class="form-control" id="phone">
+                      </div>
+                      <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" readonly>
+                      </div>
+                      <div class="mb-3">
+                        <label for="goals" class="form-label">My Goals</label>
+                        <textarea class="form-control" id="goals" rows="3"></textarea>
+                      </div>                      
+                      <button type="submit" class="btn btn-primary">Update Details</button>
+                    </form>
+
+                    <form>
+                      <h4>Update Password</h4>
+                      <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password">
+                      </div>
+                      <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword">
+                      </div>
+                      <button type="submit" class="btn btn-danger">Change Password</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>          
         </div>
       </div>
 
     </section>
 
   </main>
+
+  <!-- Batting Modal -->
+  <div class="modal fade" id="battingInsightsModal" tabindex="-1" aria-labelledby="battingInsightsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="battingInsightsModalLabel">Batting Insights</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="srNoInput" class="form-label">Sr No</label>
+                  <input type="text" class="form-control" id="srNoInput" disabled>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="mb-3">
+                  <label for="dateInput" class="form-label">Date</label>
+                  <input type="text" class="form-control" id="dateInput" disabled>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="mb-3">
+                  <label for="scoreCard" class="form-label">Score Card</label>
+                  <button class="btn btn-primary" id="scoreCard" disabled>View</button>
+                </div>
+              </div>              
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="venueInput" class="form-label">Venue</label>
+                  <input type="text" class="form-control" id="venueInput" disabled>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="playedForInput" class="form-label">Played For</label>
+                  <input type="text" class="form-control" id="playedForInput" disabled>
+                </div>
+              </div>              
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="playedAgainstInput" class="form-label">Played Against</label>
+                  <input type="text" class="form-control" id="playedAgainstInput" disabled>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="totalOversInput" class="form-label">Total Overs</label>
+                  <input type="text" class="form-control" id="totalOversInput" disabled>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="runsInput" class="form-label">Runs</label>
+                  <input type="text" class="form-control" id="runsInput" disabled>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="ballsInput" class="form-label">Balls</label>
+                  <input type="text" class="form-control" id="ballsInput" disabled>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="outAsInput" class="form-label">Out As</label>
+                  <input type="text" class="form-control" id="outAsInput" disabled>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="goodInput">Good</label>
+              <textarea class="form-control" id="goodInput" rows="2" disabled></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="improveInput">Improve</label>
+              <textarea class="form-control" id="improveInput" rows="2" disabled></textarea>
+            </div>  
+            <div class="form-group mb-3">
+              <label for="commentInput">Comment</label>
+              <textarea class="form-control" id="commentInput" rows="2" disabled></textarea>
+            </div>                        
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bowling Modal -->
+  <div class="modal fade" id="bowlingInsightsModal" tabindex="-1" aria-labelledby="bowlingInsightsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bowlingInsightsModalLabel">Bowling Insights</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="srNoInput" class="form-label">Sr No</label>
+                  <input type="text" class="form-control" id="srNoInput" disabled>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="mb-3">
+                  <label for="dateInput" class="form-label">Date</label>
+                  <input type="text" class="form-control" id="dateInput" disabled>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="mb-3">
+                  <label for="scoreCard" class="form-label">Score Card</label>
+                  <button class="btn btn-primary" id="scoreCard" disabled>View</button>
+                </div>
+              </div>   
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="tournamentInput" class="form-label">Tournament</label>
+                  <input type="text" class="form-control" id="tournamentInput">
+                </div>
+              </div>           
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="venueInput" class="form-label">Venue</label>
+                  <input type="text" class="form-control" id="venueInput" disabled>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="playedForInput" class="form-label">Played For</label>
+                  <input type="text" class="form-control" id="playedForInput" disabled>
+                </div>
+              </div>              
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="playedAgainstInput" class="form-label">Played Against</label>
+                  <input type="text" class="form-control" id="playedAgainstInput" disabled>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="mb-3">
+                  <label for="totalOversInput" class="form-label">Total Overs</label>
+                  <input type="text" class="form-control" id="totalOversInput" disabled>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="mb-3">
+                  <label for="oversInput" class="form-label">Overs</label>
+                  <input type="number" class="form-control" id="oversInput">
+                </div>
+              </div>  
+              <div class="col-4">
+                <div class="mb-3">
+                  <label for="maidenInput" class="form-label">Maiden</label>
+                  <input type="number" class="form-control" id="maidenInput">
+                </div>
+              </div>                            
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="runsInput" class="form-label">Runs</label>
+                  <input type="text" class="form-control" id="runsInput" disabled>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="wicketsInput" class="form-label">Wkts</label>
+                  <input type="number" class="form-control" id="wicketsInput">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="widesInput" class="form-label">Wides</label>
+                  <input type="number" class="form-control" id="widesInput">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="noBallsInput" class="form-label">No Balls</label>
+                  <input type="number" class="form-control" id="noBallsInput">
+                </div>
+              </div>              
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="goodInput">Good</label>
+              <textarea class="form-control" id="goodInput" rows="2" disabled></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="improveInput">Improve</label>
+              <textarea class="form-control" id="improveInput" rows="2" disabled></textarea>
+            </div>  
+            <div class="form-group mb-3">
+              <label for="commentInput">Comment</label>
+              <textarea class="form-control" id="commentInput" rows="2" disabled></textarea>
+            </div>                        
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>  
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer p-0">
@@ -244,7 +510,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
   <script src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/index.js"></script>
+  <script src="assets/js/player.js"></script>
 </body>
 
 </html>

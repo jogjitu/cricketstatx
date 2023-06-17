@@ -55,6 +55,8 @@
   --color-background-rgb: 255, 255, 255;
   --color-primary: #e84545;
   --color-primary-rgb: 232, 69, 69;
+  --bs-primary: #e84545;
+  --bs-primary-rgb: 232, 69, 69;
   --color-secondary: #32353a;
   --color-secondary-rgb: 50, 53, 58;
   --color-box-background: #ffffff;
@@ -162,7 +164,7 @@ section {
 .page-title .heading {
   padding: 60px 0;
   border-top: 1px solid rgba(var(--color-default-rgb), 0.1);
-  background-image: url('../img/bg.jpeg'); 
+  background-image: url('../img/home/grass.jpeg'); 
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1658,7 +1660,6 @@ section {
 /* Team Section - Home Page
 ------------------------------*/
 .team {
-  --color-background: #f4f4f4;
   --color-box-background-rgb: 0, 0, 0;
 }
 
@@ -1739,6 +1740,43 @@ section {
   padding-bottom: 0;
   visibility: visible;
   opacity: 1;
+}
+
+
+.team .pagination {
+  margin-top: 30px;
+  color: rgba(var(--color-default-rgb), 0.6);
+}
+
+.team .pagination ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.team .pagination li {
+  margin: 0 5px;
+  transition: 0.3s;
+}
+
+.team .pagination li a {
+  color: rgba(var(--color-default-rgb), 0.6);
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team .pagination li.active,
+.team .pagination li:hover {
+  background: var(--color-primary);
+  color: var(--color-inverse);
+}
+
+.team .pagination li.active a,
+.team .pagination li:hover a {
+  color: var(--color-inverse);
 }
 
 /* Call-to-action Section - Home Page
@@ -2464,42 +2502,6 @@ section {
   font-size: 14px;
   color: rgba(var(--color-default-rgb), 0.6);
   margin-bottom: 0;
-}
-
-.blog .pagination {
-  margin-top: 30px;
-  color: rgba(var(--color-default-rgb), 0.6);
-}
-
-.blog .pagination ul {
-  display: flex;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.blog .pagination li {
-  margin: 0 5px;
-  transition: 0.3s;
-}
-
-.blog .pagination li a {
-  color: rgba(var(--color-default-rgb), 0.6);
-  padding: 7px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.blog .pagination li.active,
-.blog .pagination li:hover {
-  background: var(--color-primary);
-  color: var(--color-inverse);
-}
-
-.blog .pagination li.active a,
-.blog .pagination li:hover a {
-  color: var(--color-inverse);
 }
 
 /*--------------------------------------------------------------
