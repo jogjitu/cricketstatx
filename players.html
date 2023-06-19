@@ -51,7 +51,7 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav><!-- End Nav Menu -->
 
-      <a href="login.html" class="btn-getstarted">Login</a>
+      <a href="login.html" id="logInBtn" class="btn-getstarted">Login</a>
 
     </div>
   </header><!-- End Header -->
@@ -75,7 +75,7 @@
             <li class="nav-item"><a class="nav-link active" id="stats-tab" data-bs-toggle="tab" href="#tab-stats" role="tab" aria-controls="tab-stats" aria-selected="true">Stats</a></li>
             <li class="nav-item"><a class="nav-link" id="batting-tab" data-bs-toggle="tab" href="#tab-batting" role="tab" aria-controls="tab-batting" aria-selected="false">Batting</a></li>
             <li class="nav-item"><a class="nav-link" id="bowling-tab" data-bs-toggle="tab" href="#tab-bowling" role="tab" aria-controls="tab-bowling" aria-selected="false">Bowling</a></li>
-            <li class="nav-item"><a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab-profile" role="tab" aria-controls="tab-profile" aria-selected="false">Profile</a></li>
+            <!-- <li class="nav-item"><a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab-profile" role="tab" aria-controls="tab-profile" aria-selected="false">Profile</a></li> -->
           </ul>
         </div>
       </nav>
@@ -111,7 +111,11 @@
               </div>
               <div id="battingTable" class="card-body">
                 <div class="row justify-content-end g-0">
-                  <div class="col-auto col-sm-5 mb-3">
+                  <div class="col-12 col-lg-3 mb-3 d-grid">
+                    <button class="btn btn-danger d-none" id="newBattingButton">Add New Entry</button>
+                  </div>
+                  <div class="col-12 col-lg-3"></div>
+                  <div class="col-12 col-lg-6 mb-3">
                     <form onsubmit="return false">
                       <div class="input-group">
                         <input class="form-control shadow-none search" type="search" placeholder="Search..." aria-label="search" />
@@ -124,16 +128,15 @@
                   <table class="table table-striped table-hover">
                     <thead class="table-dark">
                       <tr>
-                        <th class="sort" data-sort="SrNo">Sr No</th>
                         <th class="sort" data-sort="Date">Date</th>
-                        <th class="sort" data-sort="PlayedFor">Played For</th>
-                        <th class="sort" data-sort="PlayedAgainst">Played Against</th>
+                        <th class="sort" data-sort="Tournament">Tournament</th>
+                        <th class="sort" data-sort="PlayedFor"><span class="d-none d-md-inline">Played </span> For</th>
+                        <th class="sort" data-sort="PlayedAgainst"><span class="d-none d-md-inline">Played </span>Against</th>
                         <th class="sort" data-sort="Venue">Venue</th>
-                        <th class="sort" data-sort="TotalOvers">Total Overs</th>
+                        <th class="sort" data-sort="TotalOvers"><span class="d-none d-md-inline">Total </span>Overs</th>
                         <th class="sort" data-sort="Runs">Runs</th>
                         <th class="sort" data-sort="Balls">Balls</th>
                         <th class="sort" data-sort="OutAs">Out As</th>
-                        <th class="text-nowrap">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="battingTableBody" class="list">
@@ -156,21 +159,25 @@
               </div>
               <div id="bowlingTable" class="card-body">
                 <div class="row justify-content-end g-0">
-                  <div class="col-auto col-sm-5 mb-3">
-                    <form>
-                      <div class="input-group"><input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search..." aria-label="search" />
-                        <div class="input-group-text bg-transparent"><span class="fa fa-search fs--1 text-600"></span></div>
+                  <div class="col-12 col-lg-3 mb-3 d-grid">
+                    <button class="btn btn-danger d-none" id="newBowlingButton">Add New Entry</button>
+                  </div>
+                  <div class="col-12 col-lg-3"></div>
+                  <div class="col-12 col-lg-6 mb-3">
+                    <form onsubmit="return false">
+                      <div class="input-group">
+                        <input class="form-control shadow-none search" type="search" placeholder="Search..." aria-label="search" />
+                        <div class="input-group-text bg-primary text-white"><span class="fa fa-search fs--1 text-600"></span></div>
                       </div>
-                    </form>
+                    </form>                  
                   </div>
                 </div>
                 <div class="table-responsive scrollbar">
                   <table class="table table-striped table-hover">
                     <thead class="table-dark">
                       <tr>
-                        <th class="sort" data-sort="SrNo">Sr No</th>
-                        <th class="sort" data-sort="Tournament">Tournament</th>
                         <th class="sort" data-sort="Date">Date</th>
+                        <th class="sort" data-sort="Tournament">Tournament</th>
                         <th class="sort" data-sort="PlayedFor">Played For</th>
                         <th class="sort" data-sort="PlayedAgainst">Played Against</th>
                         <th class="sort" data-sort="Venue">Venue</th>
@@ -181,7 +188,6 @@
                         <th class="sort" data-sort="Wickets">Wickets</th>
                         <th class="sort" data-sort="Wides">Wides</th>
                         <th class="sort" data-sort="NoBalls">NoBalls</th>
-                        <th class="text-nowrap">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="bowlingTableBody" class="list">
@@ -197,7 +203,7 @@
           </div>
 
           <!-- Profile Tab -->
-          <div class="tab-pane fade" id="tab-profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="tab-pane fade d-none" id="tab-profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="card">
               <div class="card-header">
                 <h4>Profile</h4>
@@ -269,28 +275,27 @@
         <div class="modal-body">
           <form>
             <div class="row">
-              <div class="col-3">
-                <div class="mb-3">
-                  <label for="srNoInput" class="form-label">Sr No</label>
-                  <input type="text" class="form-control" id="srNoInput" disabled>
-                </div>
+              <div class="col d-none">
+                <input type="text" class="form-control" id="idInput">
               </div>
-              <div class="col-5">
+              <div class="col-6">
                 <div class="mb-3">
                   <label for="dateInput" class="form-label">Date</label>
                   <input type="text" class="form-control" id="dateInput" disabled>
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-6">
                 <div class="mb-3">
-                  <label for="scoreCard" class="form-label">Score Card</label>
-                  <button class="btn btn-primary" id="scoreCard" disabled>View</button>
+                  <label for="scoreCard" class="form-label">
+                    <a href="#" id="scoreLink">Score Card <i class="bi bi-box-arrow-up-right"></i></a>
+                  </label>
+                  <input type="text" class="form-control" id="scoreCardInput" disabled>
                 </div>
               </div>              
               <div class="col-12">
                 <div class="mb-3">
-                  <label for="venueInput" class="form-label">Venue</label>
-                  <input type="text" class="form-control" id="venueInput" disabled>
+                  <label for="tournamentInput" class="form-label">Tournament</label>
+                  <input type="text" class="form-control" id="tournamentInput" disabled>
                 </div>
               </div>
               <div class="col-12">
@@ -303,6 +308,12 @@
                 <div class="mb-3">
                   <label for="playedAgainstInput" class="form-label">Played Against</label>
                   <input type="text" class="form-control" id="playedAgainstInput" disabled>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="venueInput" class="form-label">Venue</label>
+                  <input type="text" class="form-control" id="venueInput" disabled>
                 </div>
               </div>
               <div class="col-6">
@@ -347,7 +358,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-warning" id="deleteBattingBtn" data-bs-dismiss="modal" onclick="deleteData('batting')">Delete</button>
+          <button type="button" class="btn btn-danger" id="saveBattingBtn" data-bs-dismiss="modal" onclick="saveBattingData()">Save</button>
         </div>
       </div>
     </div>
@@ -485,7 +497,7 @@
   </footer><!-- End Footer -->
 
   <!-- Scroll Top Button -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" id="scroll-top" class="scroll-top d-none align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Preloader -->
   <div id="preloader">
@@ -509,6 +521,7 @@
   <script src="assets/js/main.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/player.js"></script>
 </body>

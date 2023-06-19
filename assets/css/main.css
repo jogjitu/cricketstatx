@@ -65,6 +65,21 @@
   --color-inverse-rgb: 255, 255, 255;
 }
 
+.nav {
+  --bs-nav-link-color: #e84545;
+  --bs-nav-link-hover-color: #d40202;
+}
+
+.nav-pills .nav-link {
+  color: #e84545;
+  background-color: transparent;
+}
+
+.nav-pills .nav-link.active {
+  color: #fff;
+  background-color: #e84545;
+}
+
 /* Nav Menu Colors */
 :root {
   --color-nav: #3a3939;
