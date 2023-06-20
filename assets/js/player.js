@@ -8,6 +8,20 @@ const bowlingModal = document.getElementById('bowlingInsightsModal');
 const newBattingButton = document.getElementById('newBattingButton')
 const newBowlingButton = document.getElementById('newBowlingButton')
 
+const battingStatsRow = document.getElementById("battingStatsRow");
+const bowlingStatsRow = document.getElementById("bowlingStatsRow");
+
+const statsTemplate = `
+<div class="col-6 col-md-4 col-xl-3 mb-3">
+  <div class="card shadow">
+    <div class="card-body text-center">
+      <h4 class="card-title display-4">{}</h4>
+      <p class="card-text text-primary">{}</p>
+    </div>
+  </div>
+</div>
+`
+
 /**
  * ------------------------------------------------
  * Event Listeners
@@ -53,6 +67,7 @@ function getUserData(userId) {
     updatePlayerDetails(data?.details)
     updateBattingData(data?.Batting)
     updateBowlingData(data?.Bowling)
+    computeStats(data)
   }) 
 }
 
@@ -233,12 +248,9 @@ function updateBowlingData(data) {
   });
 
   // Fill the datalists with values
-  console.log(bowlingDataLists)
   Object.keys(bowlingDataLists).forEach(field => {
     const id = field.charAt(0).toLowerCase() + field.slice(1) + "BowlingList"
-    console.log(id)
     const datalist = bowlingModal.querySelector('#' + id)
-    console.log(datalist)
     if (datalist) {
       datalist.innerHTML = "";
       // Generate options based on data
@@ -336,6 +348,55 @@ function updatePlayerDetails(data) {
   }   
 }
 
+function computeStats(data) {
+  // Batting
+  if (data?.Batting && data?.Batting?.length) {
+    const batting = data?.Batting
+    const totalRuns = batting.reduce((total, x) => total + (x?.Runs || 0), 0);
+    const battingStats = {
+      Matches: batting?.length || 0,
+      Innings: batting?.length || 0,
+      "Not Out": batting.filter(x => !x?.OutAs)?.length || 0,
+      Runs: batting.reduce((t, x) => t + (x?.Runs || 0), 0),
+      "Highest Runs": batting.reduce((t, x) => Math.max(t, (x?.Runs || 0)), 0),
+      "Avg Runs": parseInt(totalRuns/batting.length),
+      Ducks: batting.filter(x => (x?.Runs || 0) == 0)?.length || 0,
+      "30s": batting.filter(x => (x?.Runs || 0) >= 30 && (x?.Runs || 0) <= 49)?.length || 0,
+      "50s": batting.filter(x => (x?.Runs || 0) >= 50 && (x?.Runs || 0) <= 99)?.length || 0,
+      "100s": batting.filter(x => (x?.Runs || 0) >=  100)?.length || 0
+    }
+
+    battingStatsRow.innerHTML = ""
+    Object.keys(battingStats).forEach(st => {
+      const newStat = statsTemplate.format(battingStats[st], st)
+      battingStatsRow.innerHTML += newStat
+    })
+  }
+
+  // Bowling
+  if (data?.Bowling && data?.Bowling?.length) {
+    const bowling = data?.Bowling
+    const totalRuns = bowling.reduce((total, x) => total + (x?.Runs || 0), 0);
+    const bowlingStats = {
+      Matches: bowling?.length || 0,
+      Innings: bowling?.length || 0,
+      Overs: bowling.reduce((t, x) => t + (x?.Overs || 0), 0),
+      Maidens: bowling.reduce((t, x) => t + (x?.Maiden || 0), 0),
+      Wickets: bowling.reduce((t, x) => t + (x?.Wickets || 0), 0),
+      Runs: bowling.reduce((t, x) => t + (x?.Runs || 0), 0),
+      "Avg Runs": parseInt(totalRuns/bowling.length),
+      Wides: bowling.reduce((t, x) => t + (x?.Wides || 0), 0),
+      "No Balls": bowling.reduce((t, x) => t + (x?.NoBalls || 0), 0),
+    }
+
+    bowlingStatsRow.innerHTML = ""
+    Object.keys(bowlingStats).forEach(st => {
+      const newStat = statsTemplate.format(bowlingStats[st], st)
+      bowlingStatsRow.innerHTML += newStat
+    })
+  }
+}
+
 /**
  * ------------------------------------------------
  * Helpers
@@ -377,3 +438,10 @@ function deleteData(type) {
     removeDataFromFirebase(path)
   }
 }
+
+String.prototype.format = function () {
+  var i = 0, args = arguments;
+  return this.replace(/{}/g, function () {
+    return typeof args[i] != 'undefined' ? args[i++] : '';
+  });
+};
