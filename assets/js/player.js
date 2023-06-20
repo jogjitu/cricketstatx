@@ -53,12 +53,7 @@ function getUserData(userId) {
     updatePlayerDetails(data?.details)
     updateBattingData(data?.Batting)
     updateBowlingData(data?.Bowling)
-  })
-
-  if (isUserLoggedIn() && isUserOwnProfile(userId)) {
-    newBattingButton.classList.remove('d-none')
-    newBowlingButton.classList.remove('d-none')
-  }  
+  }) 
 }
 
 /**
@@ -71,6 +66,8 @@ function updateBattingData(data) {
   // Get a reference to the table body element
   var dataBody = document.getElementById("battingTableBody");
   dataBody.innerHTML = "";  
+
+  const battingDataLists = {}
 
   // Iterate over the data and create table rows
   Object.keys(data).forEach(id => {
@@ -93,9 +90,33 @@ function updateBattingData(data) {
         <td class="d-none Comment">${d?.['Comment'] || '-'}</td>
         <td class="d-none ScoreLink">${d?.['ScoreLink'] || '-'}</td>
       `;
+
+    // Generate datalist with unique values
+    Object.keys(d).forEach(key => {
+      if (!battingDataLists.hasOwnProperty(key)) {
+        battingDataLists[key] = new Set()
+      }
+      battingDataLists[key].add(d[key]);     
+    });
+
     row.addEventListener('click', () => battingRowClick(row))
     dataBody.appendChild(row);
   });
+
+  // Fill the datalists with values
+  Object.keys(battingDataLists).forEach(field => {
+    const id = field.charAt(0).toLowerCase() + field.slice(1) + "List"
+    const datalist = battingModal.querySelector('#' + id)
+    if (datalist) {
+      datalist.innerHTML = "";
+      // Generate options based on data
+      battingDataLists[field].forEach(function(d) {
+        var optionElement = document.createElement("option");
+        optionElement.value = d;
+        datalist.appendChild(optionElement);
+      }); 
+    }
+  })
 
   const options = {
     "valueNames":[ "Date", "Tournament", "PlayedFor","PlayedAgainst", "Venue","TotalOvers",
@@ -171,6 +192,8 @@ function updateBowlingData(data) {
   // Get a reference to the table body element
   var dataBody = document.getElementById("bowlingTableBody");
   dataBody.innerHTML = "";
+
+  const bowlingDataLists = {}
   
   // Iterate over the data and create table rows
   Object.keys(data).forEach(id => {
@@ -196,9 +219,36 @@ function updateBowlingData(data) {
         <td class="d-none Comment">${d['Comment'] || '-'}</td>
         <td class="d-none ScoreLink">${d['ScoreLink'] || '-'}</td>
       `;
+
+    // Generate datalist with unique values
+    Object.keys(d).forEach(key => {
+      if (!bowlingDataLists.hasOwnProperty(key)) {
+        bowlingDataLists[key] = new Set()
+      }
+      bowlingDataLists[key].add(d[key]);     
+    });
+
     row.addEventListener('click', () => bowlingRowClick(row))
     dataBody.appendChild(row);
   });
+
+  // Fill the datalists with values
+  console.log(bowlingDataLists)
+  Object.keys(bowlingDataLists).forEach(field => {
+    const id = field.charAt(0).toLowerCase() + field.slice(1) + "BowlingList"
+    console.log(id)
+    const datalist = bowlingModal.querySelector('#' + id)
+    console.log(datalist)
+    if (datalist) {
+      datalist.innerHTML = "";
+      // Generate options based on data
+      bowlingDataLists[field].forEach(function(d) {
+        var optionElement = document.createElement("option");
+        optionElement.value = d;
+        datalist.appendChild(optionElement);
+      }); 
+    }
+  })  
 
   const options = {
     "valueNames":[ "Date", "Tournament", "PlayedFor", "PlayedAgainst", 
@@ -274,14 +324,16 @@ function saveBowlingData() {
  * ------------------------------------------------
  */
 
-function updatePlayerDetails() {
+function updatePlayerDetails(data) {
+  if (!data) return
   // Get a reference to the table body element
   var playerName = document.getElementById("playerName");
-
-  // Getting batting data from local storage
-  const data = JSON.parse(localStorage.getItem("details"));
-  if (!data) return
   playerName.innerHTML = data?.name || 'No Name'
+
+  if (isUserLoggedIn() && isUserOwnProfile(userId)) {
+    newBattingButton.classList.remove('d-none')
+    newBowlingButton.classList.remove('d-none')
+  }   
 }
 
 /**
@@ -303,6 +355,8 @@ function showFreshModal(modalElement) {
     input.disabled = false;
   }
 
+  modalElement.querySelector("#scoreLink").removeAttribute("href");
+
   // Show the modal
   const modal = new bootstrap.Modal(modalElement);
   modal.show();
@@ -311,13 +365,15 @@ function showFreshModal(modalElement) {
 function deleteData(type) {
   let modalElement;
   switch (type) {
-    case 'batting': modalElement = battingModal; break;
-    case 'bowling': modalElement = bowlingModal; break;
+    case 'Batting': modalElement = battingModal; break;
+    case 'Bowling': modalElement = bowlingModal; break;
   }
   if (!modalElement) return
 
-  const id = modalElement.querySelector('#idInput').value.trim()
-  if (!id || !id.length) return
-  const path = `players/${userId}/Batting/${id}`;
-  removeDataFromFirebase(path)
+  if (confirm("Are you sure you want to delete this entry?")) {
+    const id = modalElement.querySelector('#idInput').value.trim()
+    if (!id || !id.length) return
+    const path = `players/${userId}/${type}/${id}`;
+    removeDataFromFirebase(path)
+  }
 }
