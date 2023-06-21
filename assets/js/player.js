@@ -1,6 +1,11 @@
-// const urlParams = new URLSearchParams(window.location.search);
-// const userId = urlParams.get('userId');
-const userId = 'M37OoDqikMP5v1y1WNiLGPZ8PJB3'
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get('user');
+
+if (!userId) returnHome()
+
+function returnHome() {
+  window.location.href = "index.html"
+}
 
 const battingModal = document.getElementById('battingInsightsModal');
 const bowlingModal = document.getElementById('bowlingInsightsModal');
@@ -64,6 +69,7 @@ function getUserData(userId) {
   const databaseRef = database.ref(`players/${userId}`);
   databaseRef.on("value", snapshot => {
     const data = snapshot.val();
+    if (!data) returnHome()
     updatePlayerDetails(data?.details)
     updateBattingData(data?.Batting)
     updateBowlingData(data?.Bowling)

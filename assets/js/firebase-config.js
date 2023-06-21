@@ -37,25 +37,35 @@ function authenticateUser(email, password) {
       var errorCode = error.code;
       var errorMessage = error.message;
       console.error("Authentication error:", errorCode, errorMessage);
+      alert(errorMessage)
     });
 }
 
 // Check login status
 auth.onAuthStateChanged(function (user) {
   const logInBtn = document.getElementById('logInBtn')
+  const profileLink = document.getElementById('profileLink')
   if (user) {
     // User is logged in
-    if (window.location.pathname.includes('login')) {
+    if (window.location.pathname.includes('auth')) {
       window.location.href = 'index.html';
     }
     if (logInBtn) {
       logInBtn.innerHTML = 'Log Out'
       logInBtn.onclick = signOut
     }
+    if (profileLink) { 
+      profileLink.classList.remove("d-none");
+      profileLink.setAttribute('href', `player.html?user=${user.uid}`);
+    }
   } else {
     if (logInBtn) {
       logInBtn.innerHTML = 'Log In'
-      logInBtn.onclick = () => { window.location.href = 'login.html' }
+      logInBtn.onclick = () => { window.location.href = 'auth.html' }
+    }
+    if (profileLink) { 
+      profileLink.classList.add("d-none");
+      profileLink.setAttribute('href', `index.html`);
     }
   }
 });
@@ -72,6 +82,59 @@ function signIn(event) {
 
 function signOut() {
   firebase.auth().signOut()
+}
+
+function signUp(event) {
+  event.preventDefault();
+
+  const fullName = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  const confirmPassword = document.getElementById('signupPassword2').value;
+
+  // Validate inputs
+  if (!fullName || !email || !password || !confirmPassword) {
+    alert("Please enter all details")
+    return;
+  }
+
+  // Validate password match
+  if (password !== confirmPassword) {
+    alert("Password don't match!")
+    return;
+  }
+
+  // Create new user on Firebase
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      const userId = userCredential.user.uid;
+      const userDetailsRef = firebase.database().ref(`/players/${userId}/details`);
+      userDetailsRef.set({
+        name: fullName
+      })
+    })
+    .catch((error) => {
+      alert(error)
+    });
+}
+
+function forgotPassword(event) {
+  event.preventDefault();
+
+  const email = document.getElementById('forgotEmail').value;
+
+  // Validate email
+  if (!email) {
+    alert("Enter a valid email")
+    return;
+  }
+  firebase.auth().sendPasswordResetEmail(email)
+    .then(() => {
+      alert('Password reset link has been sent to your email.');
+    })
+    .catch((error) => {
+      alert(error);
+    });
 }
 
 

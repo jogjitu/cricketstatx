@@ -46,7 +46,7 @@
               <div class="card-header bg-circle-shape bg-shape text-center p-2 fw-bold fs-4">
                 <a href="index.html"><span class="text-black">Cricket</span>Statx</a>
               </div>
-              <div class="card-body p-4">
+              <div class="card-body p-4" id="login">
                 <div class="row flex-between-center">
                   <div class="col-auto">
                     <h3>Login</h3>
@@ -72,9 +72,70 @@
                 </form>
                 <div class="text-center mt-4">
                   <hr />
-                  <a class="fs--1" href="signup.html">New User? Sign Up</a>
+                  <a class="fs--1" onclick="toggleView('signup')">New User? Sign Up</a>
                 </div>
               </div>
+
+              <div class="card-body p-4 d-none" id="signup">
+                <div class="row flex-between-center">
+                  <div class="col-auto">
+                    <h3>Sign Up</h3>
+                  </div>
+                </div>
+                <form onsubmit="signUp(event);">
+                  <div class="mb-3">
+                    <label class="form-label" for="signupName">Full Name</label>
+                    <input class="form-control" id="signupName" type="text" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="signupEmail">Email address</label>
+                    <input class="form-control" id="signupEmail" type="email" />
+                  </div>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                      <label class="form-label" for="signupPassword">Password</label>
+                    </div>
+                    <input class="form-control" id="signupPassword" type="password" />
+                  </div>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                      <label class="form-label" for="signupPassword2">Confirm Password</label>
+                    </div>
+                    <input class="form-control" id="signupPassword2" type="password" />
+                  </div>
+                  <div class="row flex-between-center">
+                    <div class="col-auto"><a class="fs--1" onclick="toggleView('forgot')">Forgot Password?</a></div>
+                  </div>
+                  <div class="mb-3">
+                    <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Sign Up</button>
+                  </div>
+                </form>
+                <div class="text-center mt-4">
+                  <hr />
+                  <a class="fs--1" onclick="toggleView('login')">Existing User? Log In</a>
+                </div>
+              </div>   
+              
+              <div class="card-body p-4 d-none" id="forgot">
+                <div class="row flex-between-center">
+                  <div class="col-auto">
+                    <h3>Forgot Password</h3>
+                  </div>
+                </div>
+                <form onsubmit="forgotPassword(event);">
+                  <div class="mb-3">
+                    <label class="form-label" for="forgotEmail">Email address</label>
+                    <input class="form-control" id="forgotEmail" type="email" />
+                  </div>
+                  <div class="mb-3">
+                    <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Get Link</button>
+                  </div>
+                </form>
+                <div class="text-center mt-4">
+                  <hr />
+                  <a class="fs--1" onclick="toggleView('login')">Existing User? Log In</a>
+                </div>
+              </div>   
             </div>
           </div>
         </div>
@@ -107,6 +168,18 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
   <script src="assets/js/firebase-config.js"></script>
+
+  <script>
+    function toggleView(page) {
+      const sections = ['login', 'signup', 'forgot']
+      if (!sections.includes(page)) return
+      sections.forEach(s => {
+        const ele = document.getElementById(s)
+        if (s == page) ele.classList.remove("d-none")
+        else ele.classList.add("d-none")
+      })
+    }
+  </script>
 </body>
 
 </html>
