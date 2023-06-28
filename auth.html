@@ -64,7 +64,7 @@
                     <input class="form-control" id="loginPassword" type="password" />
                   </div>
                   <div class="row flex-between-center">
-                    <div class="col-auto"><a class="fs--1" href="forgot-password.html">Forgot Password?</a></div>
+                    <div class="col-auto"><a class="fs--1" style="cursor: pointer;" onclick="toggleView('forgot')">Forgot Password?</a></div>
                   </div>
                   <div class="mb-3">
                     <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Log in</button>
@@ -72,7 +72,7 @@
                 </form>
                 <div class="text-center mt-4">
                   <hr />
-                  <a class="fs--1" onclick="toggleView('signup')">New User? Sign Up</a>
+                  <a class="fs--1" style="cursor: pointer;" onclick="toggleView('signup')">New User? Sign Up</a>
                 </div>
               </div>
 
@@ -104,7 +104,7 @@
                     <input class="form-control" id="signupPassword2" type="password" />
                   </div>
                   <div class="row flex-between-center">
-                    <div class="col-auto"><a class="fs--1" onclick="toggleView('forgot')">Forgot Password?</a></div>
+                    <div class="col-auto"><a class="fs--1" style="cursor: pointer;" onclick="toggleView('forgot')">Forgot Password?</a></div>
                   </div>
                   <div class="mb-3">
                     <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Sign Up</button>
@@ -112,7 +112,7 @@
                 </form>
                 <div class="text-center mt-4">
                   <hr />
-                  <a class="fs--1" onclick="toggleView('login')">Existing User? Log In</a>
+                  <a class="fs--1" style="cursor: pointer;" onclick="toggleView('login')">Existing User? Log In</a>
                 </div>
               </div>   
               
@@ -133,7 +133,7 @@
                 </form>
                 <div class="text-center mt-4">
                   <hr />
-                  <a class="fs--1" onclick="toggleView('login')">Existing User? Log In</a>
+                  <a class="fs--1" style="cursor: pointer;" onclick="toggleView('login')">Existing User? Log In</a>
                 </div>
               </div>   
             </div>
@@ -170,8 +170,24 @@
   <script src="assets/js/firebase-config.js"></script>
 
   <script>
+    const sections = ['login', 'signup', 'forgot']
+    window.addEventListener('load', function() {
+      const hash = window.location.hash.split('#')?.[1]?.split('?')?.[0];
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get('email');
+
+      console.log(hash, email)
+
+      if (email) {
+        document.getElementById('signupEmail').value = email
+      }
+
+      if (sections.includes(hash)) {
+        toggleView(hash)
+      }
+    });
+
     function toggleView(page) {
-      const sections = ['login', 'signup', 'forgot']
       if (!sections.includes(page)) return
       sections.forEach(s => {
         const ele = document.getElementById(s)

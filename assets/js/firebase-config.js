@@ -48,7 +48,7 @@ auth.onAuthStateChanged(function (user) {
   if (user) {
     // User is logged in
     if (window.location.pathname.includes('auth')) {
-      window.location.href = 'index.html';
+      window.location.href = `player.html?user=${user.uid}`;
     }
     if (logInBtn) {
       logInBtn.innerHTML = 'Log Out'
@@ -131,6 +131,7 @@ function forgotPassword(event) {
   firebase.auth().sendPasswordResetEmail(email)
     .then(() => {
       alert('Password reset link has been sent to your email.');
+      location.href = "auth.html";
     })
     .catch((error) => {
       alert(error);
