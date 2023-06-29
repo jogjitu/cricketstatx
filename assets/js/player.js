@@ -109,7 +109,7 @@ function updateBattingData(data) {
         <td class="d-none Good">${d?.['Good'] || '-'}</td>
         <td class="d-none Improve">${d?.['Improve'] || '-'}</td>
         <td class="d-none Comment">${d?.['Comment'] || '-'}</td>
-        <td class="d-none ScoreLink">${d?.['ScoreLink'] || '-'}</td>
+        <td class="d-none ScoreCard">${d?.['ScoreCard'] || '-'}</td>
       `;
 
     // Generate datalist with unique values
@@ -141,8 +141,7 @@ function updateBattingData(data) {
 
   const options = {
     "valueNames":[ "Date", "Tournament", "PlayedFor","PlayedAgainst", "Venue","TotalOvers",
-      "Runs","Balls","OutAs","Good","Improve","Comment","ScoreLink"
-    ] ,"page": 15, "pagination":true
+      "Runs","Balls","OutAs"] ,"page": 15, "pagination":true
   }
   new List('battingTable', options)
 }
@@ -151,7 +150,7 @@ function battingRowClick(row) {
   const rowData = {
     id: row.id,
     date: row.querySelector('.Date').textContent,
-    scoreCard: row.querySelector('.ScoreLink').textContent,
+    scoreCard: row.querySelector('.ScoreCard').textContent,
     tournament: row.querySelector('.Tournament').textContent,
     playedFor: row.querySelector('.PlayedFor').textContent,
     playedAgainst: row.querySelector('.PlayedAgainst').textContent,
@@ -192,7 +191,7 @@ function saveBattingData() {
     const key = inputId.charAt(0).toUpperCase() + inputId.slice(1)
     rowData[key] = inputFields[i].value;
   }
-  delete rowData[id]
+  if (rowData?.Id) delete rowData.Id
   let id = battingModal.querySelector('#idInput').value.trim()
   if (!id || id == '') {
     id = Date.now()
@@ -238,7 +237,7 @@ function updateBowlingData(data) {
         <td class="d-none Good">${d['Good'] || '-'}</td>
         <td class="d-none Improve">${d['Improve'] || '-'}</td>
         <td class="d-none Comment">${d['Comment'] || '-'}</td>
-        <td class="d-none ScoreLink">${d['ScoreLink'] || '-'}</td>
+        <td class="d-none ScoreCard">${d['ScoreCard'] || '-'}</td>
       `;
 
     // Generate datalist with unique values
@@ -271,7 +270,7 @@ function updateBowlingData(data) {
   const options = {
     "valueNames":[ "Date", "Tournament", "PlayedFor", "PlayedAgainst", 
     "Venue", "TotalOvers", "Overs", "Maiden", "Runs", "Wickets", "Wides", 
-    "NoBalls", "Good", "Improve", "Comment", "ScoreLink"],
+    "NoBalls"],
     "page": 15, "pagination":true
   }
   new List('bowlingTable', options)
@@ -281,7 +280,7 @@ function bowlingRowClick(row) {
   const rowData = {
     id: row.id,
     date: row.querySelector('.Date').textContent,
-    scoreCard: row.querySelector('.ScoreLink').textContent,    
+    scoreCard: row.querySelector('.ScoreCard').textContent,    
     tournament: row.querySelector('.Tournament').textContent,
     playedFor: row.querySelector('.PlayedFor').textContent,
     playedAgainst: row.querySelector('.PlayedAgainst').textContent,
@@ -325,7 +324,7 @@ function saveBowlingData() {
     const key = inputId.charAt(0).toUpperCase() + inputId.slice(1)
     rowData[key] = inputFields[i].value;
   }
-  delete rowData[id]
+  if (rowData?.Id) delete rowData.Id
   let id = bowlingModal.querySelector('#idInput').value.trim()
   if (!id || id == '') {
     id = Date.now()
@@ -412,6 +411,7 @@ function computeStats(data) {
 function showFreshModal(modalElement) {
   const inputFields = [
     ...modalElement.querySelectorAll('input'),
+    ...modalElement.querySelectorAll('select'),
     ...modalElement.querySelectorAll('textarea')
   ];
 
