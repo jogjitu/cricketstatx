@@ -31,6 +31,7 @@ function authenticateUser(email, password) {
       var user = userCredential.user;
       console.log("User authenticated:", user);
       // Perform any additional actions or redirect to another page
+      // window.location.href = `player.html?user=${user.uid}`
     })
     .catch((error) => {
       // Authentication failed, handle error
@@ -77,7 +78,7 @@ function signIn(event) {
   var password = document.getElementById('loginPassword').value;
 
   // Call the authenticateUser function with the provided email and password
-  authenticateUser(email, password);
+  authenticateUser(email, password)
 }
 
 function signOut() {
@@ -89,11 +90,12 @@ function signUp(event) {
 
   const fullName = document.getElementById('signupName').value;
   const email = document.getElementById('signupEmail').value;
+  const number = document.getElementById('number').value;
   const password = document.getElementById('signupPassword').value;
   const confirmPassword = document.getElementById('signupPassword2').value;
 
   // Validate inputs
-  if (!fullName || !email || !password || !confirmPassword) {
+  if (!fullName || !email || !number || !password || !confirmPassword) {
     alert("Please enter all details")
     return;
   }
@@ -110,7 +112,8 @@ function signUp(event) {
       const userId = userCredential.user.uid;
       const userDetailsRef = firebase.database().ref(`/players/${userId}/details`);
       userDetailsRef.set({
-        name: fullName
+        name: fullName,
+        number
       })
     })
     .catch((error) => {
@@ -138,6 +141,28 @@ function forgotPassword(event) {
     });
 }
 
+function googleSignUp() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      // Handle successful sign-in
+      const user = result.user;
+      const name = user?.displayName || "No Name"
+
+      const userDetailsRef = firebase.database().ref(`/players/${user.uid}/details`);
+      userDetailsRef.set({ name },  (error) => {
+        if (error) {
+          throw error
+        } 
+        window.location.href = `player.html?user=${user.uid}`
+      })
+    })
+    .catch((error) => {
+      // Handle sign-in error
+      console.error("Error signing in:", error);
+    });
+};
 
 // CRUD
 

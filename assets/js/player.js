@@ -1,17 +1,26 @@
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('user');
 
-if (!userId) returnHome()
+if (!userId) createUserInDB()
 
-function returnHome() {
-  window.location.href = "index.html"
+function createUserInDB() {
+  const userId = auth.currentUser.uid;
+  const userDetailsRef = firebase.database().ref(`/players/${userId}/details`);
+  userDetailsRef.set({
+    name: "No Name"
+  })
+  getUserData(userId)
 }
 
 const battingModal = document.getElementById('battingInsightsModal');
+const practiseBattingModal = document.getElementById('practiseBattingInsightsModal');
 const bowlingModal = document.getElementById('bowlingInsightsModal');
+const practiseBowlingModal = document.getElementById('practiseBowlingInsightsModal');
 
 const newBattingButton = document.getElementById('newBattingButton')
+const newPractiseBattingButton = document.getElementById('newPractiseBattingButton')
 const newBowlingButton = document.getElementById('newBowlingButton')
+const newPractiseBowlingButton = document.getElementById('newPractiseBowlingButton')
 
 const battingStatsRow = document.getElementById("battingStatsRow");
 const bowlingStatsRow = document.getElementById("bowlingStatsRow");
@@ -36,7 +45,9 @@ const statsTemplate = `
 document.addEventListener('DOMContentLoaded', () => getUserData(userId));
 
 newBattingButton.addEventListener('click', () => showFreshModal(battingModal))
+newPractiseBattingButton.addEventListener('click', () => showFreshModal(practiseBattingModal))
 newBowlingButton.addEventListener('click', () => showFreshModal(bowlingModal))
+newPractiseBowlingButton.addEventListener('click', () => showFreshModal(practiseBowlingModal))
 
 document.addEventListener('DOMContentLoaded', function() {
   var imagePreview = document.getElementById('image-preview');
@@ -72,7 +83,9 @@ function getUserData(userId) {
     if (!data) returnHome()
     updatePlayerDetails(data?.details)
     updateBattingData(data?.Batting)
+    updatePractiseBattingData(data?.PractiseBatting)
     updateBowlingData(data?.Bowling)
+    updatePractiseBowlingData(data?.PractiseBowling)
     computeStats(data)
   }) 
 }
@@ -106,6 +119,8 @@ function updateBattingData(data) {
         <td class="Balls">${d?.['Balls'] || '-'}</td>
         <td class="OutAs">${d?.['OutAs'] || '-'}</td>
 
+        <td class="d-none Fours">${d?.['Fours'] || '0'}</td>
+        <td class="d-none Sixes">${d?.['Sixes'] || '0'}</td>
         <td class="d-none Good">${d?.['Good'] || '-'}</td>
         <td class="d-none Improve">${d?.['Improve'] || '-'}</td>
         <td class="d-none Comment">${d?.['Comment'] || '-'}</td>
@@ -157,6 +172,8 @@ function battingRowClick(row) {
     venue: row.querySelector('.Venue').textContent,
     totalOvers: row.querySelector('.TotalOvers').textContent,
     runs: row.querySelector('.Runs').textContent,
+    fours: row.querySelector('.Fours').textContent,
+    sixes: row.querySelector('.Sixes').textContent,
     balls: row.querySelector('.Balls').textContent,
     outAs: row.querySelector('.OutAs').textContent,
     good: row.querySelector('.Good').textContent,
@@ -198,6 +215,115 @@ function saveBattingData() {
   }
   if (isUserLoggedIn && isUserOwnProfile(userId)) {
     const path = `players/${userId}/Batting/${id}`;
+    updateOrAddBodyAtPath(path, rowData)
+  }
+}
+
+/**
+ * ------------------------------------------------
+ * Practise Batting
+ * ------------------------------------------------
+ */
+function updatePractiseBattingData(data) {
+  if (!data || !Object.keys(data).length) return
+  // Get a reference to the table body element
+  var dataBody = document.getElementById("practiseBattingTableBody");
+  dataBody.innerHTML = "";  
+
+  const practiseBattingDataLists = {}
+
+  // Iterate over the data and create table rows
+  Object.keys(data).forEach(id => {
+    const d = data[id];
+    var row = document.createElement("tr");
+    row.id = id;
+    row.innerHTML = `
+        <td class="Date">${d?.['Date'] || '-'}</td>
+        <td class="Venue">${d?.['Venue'] || '-'}</td>
+        <td class="Balls">${d?.['Balls'] || '-'}</td>
+        <td class="Defended">${d?.['Defended'] || '-'}</td>
+        <td class="Attacked">${d?.['Attacked'] || '-'}</td>
+        <td class="Middled">${d?.['Middled'] || '-'}</td>
+      `;
+
+    // Generate datalist with unique values
+    Object.keys(d).forEach(key => {
+      if (!practiseBattingDataLists.hasOwnProperty(key)) {
+        practiseBattingDataLists[key] = new Set()
+      }
+      practiseBattingDataLists[key].add(d[key]);     
+    });
+
+    row.addEventListener('click', () => practiseBattingRowClick(row))
+    dataBody.appendChild(row);
+  });
+
+  // Fill the datalists with values
+  Object.keys(practiseBattingDataLists).forEach(field => {
+    const id = field.charAt(0).toLowerCase() + field.slice(1) + "List"
+    const datalist = battingModal.querySelector('#' + id)
+    if (datalist) {
+      datalist.innerHTML = "";
+      // Generate options based on data
+      practiseBattingDataLists[field].forEach(function(d) {
+        var optionElement = document.createElement("option");
+        optionElement.value = d;
+        datalist.appendChild(optionElement);
+      }); 
+    }
+  })
+
+  const options = {
+    "valueNames":[ "Date", "Venue", "Balls", "Defended","Attacked","Middled"] ,"page": 15, "pagination":true
+  }
+  new List('praticeBattingTable', options)
+}
+
+function practiseBattingRowClick(row) {
+  const rowData = {
+    id: row.id,
+    date: row.querySelector('.Date').textContent,
+    venue: row.querySelector('.Venue').textContent,
+    balls: row.querySelector('.Balls').textContent,
+    defended: row.querySelector('.Defended').textContent,
+    attacked: row.querySelector('.Attacked').textContent,
+    middled: row.querySelector('.Middled').textContent,
+  };
+  console.log(rowData)
+
+  const selectors = Object.keys(rowData);
+
+  for (let i = 0; i < selectors.length; i++) {
+    const selector = selectors[i];
+    console.log(selector)
+    const input = practiseBattingModal.querySelector('#' + selector + 'Input')
+    input.value = rowData?.[selector] || '';
+    input.disabled = !(isUserLoggedIn() && isUserOwnProfile(userId));
+  }
+
+  const modal = new bootstrap.Modal(practiseBattingModal);
+  modal.show();
+};
+
+function savePractiseBattingData() {
+  const rowData = {};
+  const inputFields = [
+    ...practiseBattingModal.querySelectorAll('input'),
+    ...practiseBattingModal.querySelectorAll('textarea')
+  ];
+
+  for (let i = 0; i < inputFields.length; i++) {
+    const inputId = inputFields[i].id.replace('Input', '')
+    const key = inputId.charAt(0).toUpperCase() + inputId.slice(1)
+    rowData[key] = inputFields[i].value;
+  }
+  if (rowData?.Id) delete rowData.Id
+  let id = practiseBattingModal.querySelector('#idInput').value.trim()
+  if (!id || id == '') {
+    id = Date.now()
+  }
+  if (isUserLoggedIn && isUserOwnProfile(userId)) {
+    const path = `players/${userId}/PractiseBatting/${id}`;
     updateOrAddBodyAtPath(path, rowData)
   }
 }
@@ -337,6 +463,110 @@ function saveBowlingData() {
 
 /**
  * ------------------------------------------------
+ * Practise Bowling
+ * ------------------------------------------------
+ */
+function updatePractiseBowlingData(data) {
+  if (!data || !Object.keys(data).length) return
+  // Get a reference to the table body element
+  var dataBody = document.getElementById("practiseBowlingTableBody");
+  dataBody.innerHTML = "";
+
+  const PractiseBowlingDataLists = {}
+  
+  // Iterate over the data and create table rows
+  Object.keys(data).forEach(id => {
+    const d = data[id];
+    var row = document.createElement("tr");
+    row.id = id;
+    row.innerHTML = `
+        <td class="Date">${d['Date'] || '-'}</td>
+        <td class="Venue">${d['Venue'] || '-'}</td>
+        <td class="Balls">${d['Balls'] || '-'}</td>
+        <td class="Accurate">${d['Accurate'] || '-'}</td>
+      `;
+
+    // Generate datalist with unique values
+    Object.keys(d).forEach(key => {
+      if (!PractiseBowlingDataLists.hasOwnProperty(key)) {
+        PractiseBowlingDataLists[key] = new Set()
+      }
+      PractiseBowlingDataLists[key].add(d[key]);     
+    });
+
+    row.addEventListener('click', () => practiseBowlingRowClick(row))
+    dataBody.appendChild(row);
+  });
+
+  // Fill the datalists with values
+  Object.keys(PractiseBowlingDataLists).forEach(field => {
+    const id = field.charAt(0).toLowerCase() + field.slice(1) + "PractiseBowlingList"
+    const datalist = practiseBowlingModal.querySelector('#' + id)
+    if (datalist) {
+      datalist.innerHTML = "";
+      // Generate options based on data
+      PractiseBowlingDataLists[field].forEach(function(d) {
+        var optionElement = document.createElement("option");
+        optionElement.value = d;
+        datalist.appendChild(optionElement);
+      }); 
+    }
+  })  
+
+  const options = {
+    "valueNames":[ "Date", "Venue", "Balls", "Accurate"],
+    "page": 15, "pagination":true
+  }
+  new List('practiseBowlingTable', options)
+}
+
+function practiseBowlingRowClick(row) {
+  const rowData = {
+    id: row.id,
+    date: row.querySelector('.Date').textContent,
+    venue: row.querySelector('.Venue').textContent,
+    balls: row.querySelector('.Balls').textContent,
+    accurate: row.querySelector('.Accurate').textContent
+  };
+
+  const selectors = Object.keys(rowData);
+
+  for (let i = 0; i < selectors.length; i++) {
+    const selector = selectors[i];
+    const input = practiseBowlingModal.querySelector('#' + selector + 'Input')
+    input.value = rowData?.[selector] || '';
+    input.disabled = !(isUserLoggedIn() && isUserOwnProfile(userId));
+  }
+
+  const modal = new bootstrap.Modal(practiseBowlingModal);
+  modal.show();
+}
+
+function savePractiseBowlingData() {
+  const rowData = {};
+  const inputFields = [
+    ...practiseBowlingModal.querySelectorAll('input'),
+    ...practiseBowlingModal.querySelectorAll('textarea')
+  ];
+
+  for (let i = 0; i < inputFields.length; i++) {
+    const inputId = inputFields[i].id.replace('Input', '')
+    const key = inputId.charAt(0).toUpperCase() + inputId.slice(1)
+    rowData[key] = inputFields[i].value;
+  }
+  if (rowData?.Id) delete rowData.Id
+  let id = practiseBowlingModal.querySelector('#idInput').value.trim()
+  if (!id || id == '') {
+    id = Date.now()
+  }
+  if (isUserLoggedIn && isUserOwnProfile(userId)) {
+    const path = `players/${userId}/PractiseBowling/${id}`;
+    updateOrAddBodyAtPath(path, rowData)
+  }
+}
+
+/**
+ * ------------------------------------------------
  * Profile
  * ------------------------------------------------
  */
@@ -350,6 +580,8 @@ function updatePlayerDetails(data) {
   if (isUserLoggedIn() && isUserOwnProfile(userId)) {
     newBattingButton.classList.remove('d-none')
     newBowlingButton.classList.remove('d-none')
+    newPractiseBattingButton.classList.remove('d-none')
+    newPractiseBowlingButton.classList.remove('d-none')    
   }   
 }
 
@@ -422,7 +654,7 @@ function showFreshModal(modalElement) {
     input.disabled = false;
   }
 
-  modalElement.querySelector("#scoreLink").removeAttribute("href");
+  modalElement.querySelector("#scoreLink")?.removeAttribute("href");
 
   // Show the modal
   const modal = new bootstrap.Modal(modalElement);
@@ -433,7 +665,9 @@ function deleteData(type) {
   let modalElement;
   switch (type) {
     case 'Batting': modalElement = battingModal; break;
+    case 'PractiseBatting': modalElement = practiseBattingModal; break;
     case 'Bowling': modalElement = bowlingModal; break;
+    case 'PractiseBowling': modalElement = practiseBowlingModal; break;
   }
   if (!modalElement) return
 

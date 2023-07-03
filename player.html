@@ -38,7 +38,7 @@
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
       <a class="logo d-flex align-items-center me-auto me-xl-0" href="index.html">
-
+        <img src="./assets/img/logo.png" alt="">
         <h1>Cricket</h1>
         <span>Statx</span>
       </a>
@@ -79,7 +79,9 @@
             <li class="nav-item"><a class="nav-link active" id="stats-tab" data-bs-toggle="tab" href="#tab-stats" role="tab" aria-controls="tab-stats" aria-selected="true">Stats</a></li>
             <li class="nav-item"><a class="nav-link" id="batting-tab" data-bs-toggle="tab" href="#tab-batting" role="tab" aria-controls="tab-batting" aria-selected="false">Batting</a></li>
             <li class="nav-item"><a class="nav-link" id="bowling-tab" data-bs-toggle="tab" href="#tab-bowling" role="tab" aria-controls="tab-bowling" aria-selected="false">Bowling</a></li>
-            <!-- <li class="nav-item"><a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab-profile" role="tab" aria-controls="tab-profile" aria-selected="false">Profile</a></li> -->
+            <li class="nav-item"><a class="nav-link" id="practise-batting-tab" data-bs-toggle="tab" href="#tab-practise-batting" role="tab" aria-controls="tab-practise-batting" aria-selected="false">Practise Batting</a></li>
+            <li class="nav-item"><a class="nav-link" id="practise-bowling-tab" data-bs-toggle="tab" href="#tab-practise-bowling" role="tab" aria-controls="tab-practise-bowling" aria-selected="false">Practise Bowling</a></li>
+            <li class="nav-item"><a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab-profile" role="tab" aria-controls="tab-profile" aria-selected="false">Profile</a></li>
           </ul>
         </div>
       </nav>
@@ -213,7 +215,7 @@
           </div>
 
           <!-- Profile Tab -->
-          <div class="tab-pane fade d-none" id="tab-profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="tab-pane fade" id="tab-profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="card">
               <div class="card-header">
                 <h4>Profile</h4>
@@ -266,7 +268,95 @@
                 </div>
               </div>
             </div>
-          </div>          
+          </div>    
+          
+          <!-- Practise Batting Tab -->
+          <div class="tab-pane fade" id="tab-practise-batting" role="tabpanel" aria-labelledby="practise-batting-tab">
+            <div class="card">
+              <div class="card-header">
+                <h4>Practise Batting Statx</h4>
+              </div>
+              <div id="practiseBattingTable" class="card-body">
+                <div class="row justify-content-end g-0">
+                  <div class="col-12 col-lg-3 mb-3 d-grid">
+                    <button class="btn btn-danger d-none" id="newPractiseBattingButton">Add New Entry</button>
+                  </div>
+                  <div class="col-12 col-lg-3"></div>
+                  <div class="col-12 col-lg-6 mb-3">
+                    <form onsubmit="return false">
+                      <div class="input-group">
+                        <input class="form-control shadow-none search" type="search" placeholder="Search..." aria-label="search" />
+                        <div class="input-group-text bg-primary text-white"><span class="fa fa-search fs--1 text-600"></span></div>
+                      </div>
+                    </form>                  
+                  </div>
+                </div>
+                <div class="table-responsive border scrollbar rounded">
+                  <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                      <tr>
+                        <th class="sort" data-sort="Date">Date</th>
+                        <th class="sort" data-sort="Venue">Venue</th>
+                        <th class="sort" data-sort="Balls">Total Played</th>
+                        <th class="sort" data-sort="Defended">Defended</th>
+                        <th class="sort" data-sort="Attacked">Attacked</th>
+                        <th class="sort" data-sort="Middled">Middled</th>
+                      </tr>
+                    </thead>
+                    <tbody id="practiseBattingTableBody" class="list">
+                      <!-- Data rows will be dynamically added here -->
+                    </tbody>
+                  </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                  <ul class="pagination mb-0"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practise Bowling Tab -->
+          <div class="tab-pane fade" id="tab-practise-bowling" role="tabpanel" aria-labelledby="practise-bowling-tab">
+            <div class="card">
+              <div class="card-header">
+                <h4>Practise Bowling Statx</h4>
+              </div>
+              <div id="practiseBowlingTable" class="card-body">
+                <div class="row justify-content-end g-0">
+                  <div class="col-12 col-lg-3 mb-3 d-grid">
+                    <button class="btn btn-danger d-none" id="newPractiseBowlingButton">Add New Entry</button>
+                  </div>
+                  <div class="col-12 col-lg-3"></div>
+                  <div class="col-12 col-lg-6 mb-3">
+                    <form onsubmit="return false">
+                      <div class="input-group">
+                        <input class="form-control shadow-none search" type="search" placeholder="Search..." aria-label="search" />
+                        <div class="input-group-text bg-primary text-white"><span class="fa fa-search fs--1 text-600"></span></div>
+                      </div>
+                    </form>                  
+                  </div>
+                </div>
+                <div class="table-responsive scrollbar rounded">
+                  <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                      <tr>
+                        <th class="sort" data-sort="Date">Date</th>
+                        <th class="sort" data-sort="Venue">Venue</th>
+                        <th class="sort" data-sort="Balls">Balls</th>
+                        <th class="sort" data-sort="Accurate">Accurate</th>
+                      </tr>
+                    </thead>
+                    <tbody id="practiseBowlingTableBody" class="list">
+                      <!-- Data rows will be dynamically added here -->
+                    </tbody>
+                  </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                  <ul class="pagination mb-0"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -301,7 +391,61 @@
                   </label>
                   <input type="text" class="form-control" id="scoreCardInput" disabled>
                 </div>
+              </div>     
+              
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="runsInput" class="form-label">Runs</label>
+                  <input type="number" min="0" step="1" class="form-control" id="runsInput" disabled>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="ballsInput" class="form-label">Balls</label>
+                  <input type="number" min="0" step="1" class="form-control" id="ballsInput" disabled>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="foursInput" class="form-label">4s</label>
+                  <input type="number" min="0" step="1" class="form-control" id="foursInput" disabled>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="sixesInput" class="form-label">6s</label>
+                  <input type="number" min="0" step="1" class="form-control" id="sixesInput" disabled>
+                </div>
               </div>              
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="outAsInput" class="form-label">Out As</label>
+                  <select class="form-control" id="outAsInput" disabled>
+                    <option value="">Select dismissal mode</option>
+                    <option value="caught">Caught</option>
+                    <option value="bowled">Bowled</option>
+                    <option value="lbw">LBW (Leg Before Wicket)</option>
+                    <option value="runout">Run Out</option>
+                    <option value="stumped">Stumped</option>
+                    <option value="hitwicket">Hit Wicket</option>
+                    <option value="retiredhurt">Retired Hurt</option>
+                    <option value="retiredout">Retired Out</option>
+                    <option value="timedout">Timed Out</option>
+                    <option value="doublehit">Double Hit</option>
+                    <option value="mankaded">Mankaded</option>
+                    <option value="handledball">Handled the Ball</option>
+                    <option value="obstructingfield">Obstructing the Field</option>                    
+                  </select>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="totalOversInput" class="form-label">Total Overs</label>
+                  <input type="number" min="0" step="1" class="form-control" id="totalOversInput" disabled>
+                </div>
+              </div>              
+              
               <div class="col-12">
                 <div class="mb-3">
                   <label for="tournamentInput" class="form-label">Tournament</label>
@@ -330,31 +474,8 @@
                   <datalist id="venueList"></datalist>
                 </div>
               </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="totalOversInput" class="form-label">Total Overs</label>
-                  <input type="number" min="0" step="1" class="form-control" id="totalOversInput" disabled>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="runsInput" class="form-label">Runs</label>
-                  <input type="number" min="0" step="1" class="form-control" id="runsInput" disabled>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="ballsInput" class="form-label">Balls</label>
-                  <input type="number" min="0" step="1" class="form-control" id="ballsInput" disabled>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="outAsInput" class="form-label">Out As</label>
-                  <input type="text" class="form-control" id="outAsInput" list="outAsList" disabled>
-                  <datalist id="outAsList"></datalist>
-                </div>
-              </div>
+
+              
             </div>
 
             <div class="form-group mb-3">
@@ -379,6 +500,70 @@
       </div>
     </div>
   </div>
+
+  <!-- Practise Batting Modal -->
+  <div class="modal fade" id="practiseBattingInsightsModal" tabindex="-1" aria-labelledby="practiseBattingInsightsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="battingInsightsModalLabel">Batting Insights</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <div class="col d-none">
+                <input type="text" class="form-control" id="idInput">
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="dateInput" class="form-label">Date</label>
+                  <input type="text" class="form-control" id="dateInput" placeholder="YYYY-MM-DD" disabled>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="venueInput" class="form-label">Venue</label>
+                  <input type="text" class="form-control" id="venueInput" disabled>
+                </div>
+              </div>
+              
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="ballsInput" class="form-label">Total Played</label>
+                  <input type="number" min="0" step="1" class="form-control" id="ballsInput" disabled>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="defendedInput" class="form-label">Defended</label>
+                  <input type="number" min="0" step="1" class="form-control" id="defendedInput" disabled>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="attackedInput" class="form-label">Attacked</label>
+                  <input type="number" min="0" step="1" class="form-control" id="attackedInput" disabled>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="mb-3">
+                  <label for="middledInput" class="form-label">Middled</label>
+                  <input type="number" min="0" step="1" class="form-control" id="middledInput" disabled>
+                </div>
+              </div>                                          
+              
+            </div>                      
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-warning" id="deleteBattingBtn" data-bs-dismiss="modal" onclick="deleteData('PractiseBatting')">Delete</button>
+          <button type="button" class="btn btn-danger" id="saveBattingBtn" data-bs-dismiss="modal" onclick="savePractiseBattingData()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>  
 
   <!-- Bowling Modal -->
   <div class="modal fade" id="bowlingInsightsModal" tabindex="-1" aria-labelledby="bowlingInsightsModalLabel" aria-hidden="true">
@@ -408,34 +593,6 @@
                   <input type="text" class="form-control" id="scoreCardInput" disabled>
                 </div>
               </div>  
-              <div class="col-12">
-                <div class="mb-3">
-                  <label for="tournamentInput" class="form-label">Tournament</label>
-                  <input type="text" class="form-control" id="tournamentInput" list="tournamentBowlingList">
-                  <datalist id="tournamentBowlingList"></datalist>
-                </div>
-              </div>           
-              <div class="col-12">
-                <div class="mb-3">
-                  <label for="venueInput" class="form-label">Venue</label>
-                  <input type="text" class="form-control" id="venueInput" list="venueBowlingList">
-                  <datalist id="venueBowlingList"></datalist>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="mb-3">
-                  <label for="playedForInput" class="form-label">Played For</label>
-                  <input type="text" class="form-control" id="playedForInput" list="playedForBowlingList">
-                  <datalist id="playedForBowlingList"></datalist>
-                </div>
-              </div>              
-              <div class="col-12">
-                <div class="mb-3">
-                  <label for="playedAgainstInput" class="form-label">Played Against</label>
-                  <input type="text" class="form-control" id="playedAgainstInput" list="playedAgainstBowlingList">
-                  <datalist id="playedAgainstBowlingList"></datalist>
-                </div>
-              </div>
               <div class="col-4">
                 <div class="mb-3">
                   <label for="totalOversInput" class="form-label">Total Overs</label>
@@ -477,7 +634,36 @@
                   <label for="noBallsInput" class="form-label">No Balls</label>
                   <input type="number" min="0" step="1" class="form-control" id="noBallsInput">
                 </div>
+              </div>                
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="tournamentInput" class="form-label">Tournament</label>
+                  <input type="text" class="form-control" id="tournamentInput" list="tournamentBowlingList">
+                  <datalist id="tournamentBowlingList"></datalist>
+                </div>
+              </div>           
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="venueInput" class="form-label">Venue</label>
+                  <input type="text" class="form-control" id="venueInput" list="venueBowlingList">
+                  <datalist id="venueBowlingList"></datalist>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="playedForInput" class="form-label">Played For</label>
+                  <input type="text" class="form-control" id="playedForInput" list="playedForBowlingList">
+                  <datalist id="playedForBowlingList"></datalist>
+                </div>
               </div>              
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="playedAgainstInput" class="form-label">Played Against</label>
+                  <input type="text" class="form-control" id="playedAgainstInput" list="playedAgainstBowlingList">
+                  <datalist id="playedAgainstBowlingList"></datalist>
+                </div>
+              </div>
+            
             </div>
 
             <div class="form-group mb-3">
@@ -502,6 +688,55 @@
       </div>
     </div>
   </div>  
+
+  <!-- Practise Bowling Modal -->
+  <div class="modal fade" id="practiseBowlingInsightsModal" tabindex="-1" aria-labelledby="practiseBowlingInsightsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bowlingInsightsModalLabel">Practise Bowling Insights</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <div class="col d-none">
+                <input type="text" class="form-control" id="idInput">
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="dateInput" class="form-label">Date</label>
+                  <input type="text" class="form-control" id="dateInput" placeholder="YYYY-MM-DD" disabled>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="venueInput" class="form-label">Venue</label>
+                  <input type="text" class="form-control" id="venueInput" disabled>
+                </div>
+              </div>              
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="ballsInput" class="form-label">Balls</label>
+                  <input type="number" min="0" step="1" class="form-control" id="ballsInput">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-3">
+                  <label for="accurateInput" class="form-label">Accurate</label>
+                  <input type="number" min="0" step="1" class="form-control" id="accurateInput">
+                </div>
+              </div>                      
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-warning" id="deleteBowlingBtn" data-bs-dismiss="modal" onclick="deleteData('PractiseBowling')">Delete</button>
+          <button type="button" class="btn btn-danger" id="saveBowlingBtn" data-bs-dismiss="modal" onclick="savePractiseBowlingData()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>    
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer p-0">
@@ -546,6 +781,12 @@
           format: 'yyyy-mm-dd' // Set the desired date format
         });
         $('#bowlingInsightsModal #dateInput').datepicker({
+          format: 'yyyy-mm-dd' // Set the desired date format
+        });
+        $('#practiseBattingInsightsModal #dateInput').datepicker({
+          format: 'yyyy-mm-dd' // Set the desired date format
+        });
+        $('#practiseBowlingInsightsModal #dateInput').datepicker({
           format: 'yyyy-mm-dd' // Set the desired date format
         });
       });
