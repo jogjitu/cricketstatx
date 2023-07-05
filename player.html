@@ -301,6 +301,7 @@
                         <th class="sort" data-sort="Defended">Defended</th>
                         <th class="sort" data-sort="Attacked">Attacked</th>
                         <th class="sort" data-sort="Middled">Middled</th>
+                        <th class="sort" data-sort="Notes">Notes</th>
                       </tr>
                     </thead>
                     <tbody id="practiseBattingTableBody" class="list">
@@ -344,6 +345,7 @@
                         <th class="sort" data-sort="Venue">Venue</th>
                         <th class="sort" data-sort="Balls">Balls</th>
                         <th class="sort" data-sort="Accurate">Accurate</th>
+                        <th class="sort" data-sort="Notes">Notes</th>
                       </tr>
                     </thead>
                     <tbody id="practiseBowlingTableBody" class="list">
@@ -506,7 +508,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="battingInsightsModalLabel">Batting Insights</h5>
+          <h5 class="modal-title" id="practiseBattingInsightsModalLabel">Practise Batting Insights</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -551,15 +553,19 @@
                   <label for="middledInput" class="form-label">Middled</label>
                   <input type="number" min="0" step="1" class="form-control" id="middledInput" disabled>
                 </div>
-              </div>                                          
-              
-            </div>                      
+              </div>                                            
+            </div>
+            <div class="form-group mb-3">
+              <label for="notesInput" class="form-label">Notes</label>
+              <textarea class="form-control" id="notesInput" rows="2" disabled></textarea>
+          </div>                                                        
+                  
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-warning" id="deleteBattingBtn" data-bs-dismiss="modal" onclick="deleteData('PractiseBatting')">Delete</button>
-          <button type="button" class="btn btn-danger" id="saveBattingBtn" data-bs-dismiss="modal" onclick="savePractiseBattingData()">Save</button>
+          <button type="button" class="btn btn-warning" id="deletePracBattingBtn" data-bs-dismiss="modal" onclick="deleteData('PractiseBatting')">Delete</button>
+          <button type="button" class="btn btn-danger" id="savePracBattingBtn" data-bs-dismiss="modal" onclick="savePractiseBattingData()">Save</button>
         </div>
       </div>
     </div>
@@ -726,8 +732,12 @@
                   <label for="accurateInput" class="form-label">Accurate</label>
                   <input type="number" min="0" step="1" class="form-control" id="accurateInput">
                 </div>
-              </div>                      
-          </form>
+              </div>
+              <div class="form-group mb-3">
+                <label for="notesInput" class="form-label">Notes</label>
+                <textarea class="form-control" id="notesInput" rows="2" disabled></textarea>
+            </div>                                          
+        </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -244,6 +244,7 @@ function updatePractiseBattingData(data) {
         <td class="Defended">${d?.['Defended'] || '-'}</td>
         <td class="Attacked">${d?.['Attacked'] || '-'}</td>
         <td class="Middled">${d?.['Middled'] || '-'}</td>
+        <td class="Notes">${d['Notes'] || '-'}</td>
       `;
 
     // Generate datalist with unique values
@@ -274,7 +275,7 @@ function updatePractiseBattingData(data) {
   })
 
   const options = {
-    "valueNames":[ "Date", "Venue", "Balls", "Defended","Attacked","Middled"] ,"page": 15, "pagination":true
+    "valueNames":[ "Date", "Venue", "Balls", "Defended","Attacked","Middled","Notes"] ,"page": 15, "pagination":true
   }
   new List('praticeBattingTable', options)
 }
@@ -288,6 +289,7 @@ function practiseBattingRowClick(row) {
     defended: row.querySelector('.Defended').textContent,
     attacked: row.querySelector('.Attacked').textContent,
     middled: row.querySelector('.Middled').textContent,
+    notes: row.querySelector('.Notes').textContent
   };
   console.log(rowData)
 
@@ -484,6 +486,7 @@ function updatePractiseBowlingData(data) {
         <td class="Venue">${d['Venue'] || '-'}</td>
         <td class="Balls">${d['Balls'] || '-'}</td>
         <td class="Accurate">${d['Accurate'] || '-'}</td>
+        <td class="Notes">${d['Notes'] || '-'}</td>
       `;
 
     // Generate datalist with unique values
@@ -514,7 +517,7 @@ function updatePractiseBowlingData(data) {
   })  
 
   const options = {
-    "valueNames":[ "Date", "Venue", "Balls", "Accurate"],
+    "valueNames":[ "Date", "Venue", "Balls", "Accurate","Notes"],
     "page": 15, "pagination":true
   }
   new List('practiseBowlingTable', options)
@@ -526,7 +529,8 @@ function practiseBowlingRowClick(row) {
     date: row.querySelector('.Date').textContent,
     venue: row.querySelector('.Venue').textContent,
     balls: row.querySelector('.Balls').textContent,
-    accurate: row.querySelector('.Accurate').textContent
+    accurate: row.querySelector('.Accurate').textContent,
+    notes: row.querySelector('.Notes').textContent
   };
 
   const selectors = Object.keys(rowData);
@@ -670,12 +674,12 @@ function deleteData(type) {
     case 'PractiseBowling': modalElement = practiseBowlingModal; break;
   }
   if (!modalElement) return
-
   if (confirm("Are you sure you want to delete this entry?")) {
     const id = modalElement.querySelector('#idInput').value.trim()
+    console.log("I am id - " + id);
     if (!id || !id.length) return
     const path = `players/${userId}/${type}/${id}`;
-    removeDataFromFirebase(path)
+    removeDataFromFirebase(path)    
   }
 }
 
